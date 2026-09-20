@@ -4,6 +4,10 @@
 
 This repository is the culmination of a semester long project led by members of Illinois Data Science during the Spring semester of the academic year 2022-2023.
 
+## About This Version
+
+This copy (`idscprojectv2`) is a personal revision maintained by Harshi Vetrivel, meant to show how the analysis has evolved since the original 2023 submission. It replaces the original 2014-2020 data snapshot with a refreshed 2014-2023 export from the same source, fixes several data-cleaning bugs the original notebook had (see Methodology), and replaces the original grab-bag of exploratory/predictive analyses with a single, more rigorously tested question. The original team and description below are preserved as historical context; the Methodology and Dataset sections describe the current state of the notebook.
+
 # Meet our Team:
 
 Denise Bahena -  Co-Team Lead
@@ -34,20 +38,22 @@ Packages used to complete analysis are:
 Pandas — Data Analysis
 Numpy — Number manipulation
 Matplotlib.pyplot — Data Visualization
-Seaborn — Data Visualization
-Sklearn — Predictive Analytics
 
 # Methodology
-Chicago_Energy.ipynb - A Jupyter Notebook file that contains the descriptive and predictive analytics used to answer the following research questions:
-  Is there a linear association between Total GHG emissions and the following factors: electricity use & square feet?
-  Is there a significant difference between the mean ghg usage between different types of buildings?
+Chicago_Energy.ipynb is a Jupyter Notebook that:
 
+1. Loads `Chicago_Energy_Benchmarking.csv` and cleans it: renames the portal export's human-readable column headers to the snake_case field names the API version uses, coerces the numeric columns the export formats with thousands separators (e.g. `"104,849"`) back to numeric, audits missing values and duplicate `(id, data_year)` records, and buckets each property's community area into a region.
+2. Answers two questions the original single-snapshot version couldn't, now that the dataset spans 10 years (2014-2023):
+   - **Has citywide GHG intensity actually declined, or does that just reflect a changing mix of reporting buildings?** Chicago's benchmarking ordinance phased in by building size, so the early reporting pool is a much smaller, different population than the later one. This is checked against a fixed panel of buildings with a multi-year reporting history, not just the raw yearly average.
+   - **Among buildings tracked across multiple years, are individual buildings actually reducing their own emissions intensity?** Each repeat-reporting building gets its own year-over-year trend, rather than relying on a citywide average that a changing population or a few large movers could distort.
 
-# Dataset: Chicago Energy Benchmarking 2020 
+The original 2023 version instead asked whether GHG emissions were linearly associated with electricity use and square footage, and whether mean GHG intensity differed significantly across building types, using regression, a building-size classifier (Random Forest / KNN), and a Geopandas map. That analysis has been removed from this version in favor of the trend analysis above; it's still available in this repository's git history.
 
-Chicago Energy Benchmarking (CSV) sourced through: City of Chicago Data Portal
+# Dataset: Chicago Energy Benchmarking, 2014-2023
 
-Chicago Outline files: Shape files for Geopandas visualization
+Chicago Energy Benchmarking (CSV) sourced through: City of Chicago Data Portal. Refreshed September 2026 from the same source as the original project; replaces the original 2014-2020 snapshot (17,728 rows) with a 2014-2023 export (28,329 rows).
+
+Chicago Outline shape files: used by the original version's Geopandas map, which this version no longer includes. Left in the repository in case a spatial visualization is added back later.
 
 # Data Dictionary
 
@@ -108,6 +114,4 @@ Latitude: Latitude of the property
 Longitude: Longitude of the property
 
 Location: Latitude and longitude of the property
-
-Building Size: Size of the property - Small, Medium or Large
 
